@@ -7,8 +7,8 @@
 
 import UIKit
 
-open class UICollectionViewClosureAdapter<ODS: ObservableDataSourceSubscribe & ObservableDataSourceContent>
-    : UICollectionViewAdapter<ODS> {
+open class UICollectionViewClosureAdapter<ODS>: UICollectionViewAdapter<ODS>
+where ODS: ObservableDataSourceSubscribe & ObservableDataSourceContent {
    
     public typealias CellForRowHandler = ((UICollectionView, IndexPath, ODS.Row) -> UICollectionViewCell)
     public typealias ViewForSupplementaryElementOfKindHandler = ((UICollectionView, String, IndexPath) -> UICollectionReusableView)
@@ -17,7 +17,7 @@ open class UICollectionViewClosureAdapter<ODS: ObservableDataSourceSubscribe & O
     /// UICollectionView is object, first Int is number of sections, second Int is number of items in section
     public typealias NumberOfItemsInSectionHandler = ((UICollectionView, Int, Int) -> Int)
     
-    open private(set) var cellForRowHandler: CellForRowHandler
+    open private(set) var cellForRowHandler: CellForRowHandler?
     open private(set) var viewForSupplementaryElementOfKindHandler: ViewForSupplementaryElementOfKindHandler?
     open private(set) var numberOfSectionsHandler: NumberOfSectionsHandler?
     open private(set) var numberOfItemsInSectionHandler: NumberOfItemsInSectionHandler?
@@ -50,14 +50,24 @@ open class UICollectionViewClosureAdapter<ODS: ObservableDataSourceSubscribe & O
     }
     
     open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let rowItem = observableDataSource?.getRow(at: indexPath)
+        guard let rowItem = observableDataSource?.getRow(at: indexPath),
+              let cellForRowHandler = cellForRowHandler
         else { return UICollectionViewCell() }
         
-        return self.cellForRowHandler(collectionView, indexPath, rowItem)
+        return cellForRowHandler(collectionView, indexPath, rowItem)
     }
     
     open func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let cell = self.viewForSupplementaryElementOfKindHandler?(collectionView, kind, indexPath)
         return cell ?? UICollectionReusableView()
+    }
+    
+    public override func cancel() {
+        super.cancel()
+        
+        self.cellForRowHandler = nil
+        self.viewForSupplementaryElementOfKindHandler = nil
+        self.numberOfSectionsHandler = nil
+        self.numberOfItemsInSectionHandler = nil
     }
 }

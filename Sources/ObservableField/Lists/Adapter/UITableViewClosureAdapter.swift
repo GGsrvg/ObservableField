@@ -7,8 +7,8 @@
 
 import UIKit
 
-open class UITableViewClosureAdapter<ODS: ObservableDataSourceSubscribe & ObservableDataSourceContent>
-    : UITableViewAdapter<ODS> {
+open class UITableViewClosureAdapter<ODS>: UITableViewAdapter<ODS>
+where ODS: ObservableDataSourceSubscribe & ObservableDataSourceContent {
     
     public typealias CellForRowHandler = ((UITableView, IndexPath, ODS.Row) -> UITableViewCell)
     public typealias TitleForSectionHandler = ((UITableView, Int) -> String?)
@@ -17,7 +17,7 @@ open class UITableViewClosureAdapter<ODS: ObservableDataSourceSubscribe & Observ
     /// UITableView is object, first Int is number of sections, second Int is number of items in section
     public typealias NumberOfItemsInSectionHandler = ((UITableView, Int, Int) -> Int)
     
-    open private(set) var cellForRowHandler: CellForRowHandler
+    open private(set) var cellForRowHandler: CellForRowHandler?
     open private(set) var titleForHeaderSectionHandler: TitleForSectionHandler?
     open private(set) var titleForFooterSectionHandler: TitleForSectionHandler?
     open private(set) var numberOfSectionsHandler: NumberOfSectionsHandler?
@@ -38,6 +38,14 @@ open class UITableViewClosureAdapter<ODS: ObservableDataSourceSubscribe & Observ
         self.numberOfSectionsHandler = numberOfSectionsHandler
         self.numberOfItemsInSectionHandler = numberOfItemsInSectionHandler
         super.init(tableView, observableDataSource: observableDataSource)
+    }
+    
+    deinit {
+        self.cellForRowHandler = nil
+        self.titleForHeaderSectionHandler = nil
+        self.titleForFooterSectionHandler = nil
+        self.numberOfSectionsHandler = nil
+        self.numberOfItemsInSectionHandler = nil
     }
     
     open override func numberOfSections(in tableView: UITableView) -> Int {
@@ -61,9 +69,20 @@ open class UITableViewClosureAdapter<ODS: ObservableDataSourceSubscribe & Observ
     }
     
     open override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let rowItem = observableDataSource?.getRow(at: indexPath)
+        guard let rowItem = observableDataSource?.getRow(at: indexPath),
+              let cellForRowHandler = cellForRowHandler
         else { return UITableViewCell() }
         
-        return self.cellForRowHandler(tableView, indexPath, rowItem)
+        return cellForRowHandler(tableView, indexPath, rowItem)
+    }
+    
+    public override func cancel() {
+        super.cancel()
+        
+        self.cellForRowHandler = nil
+        self.titleForHeaderSectionHandler = nil
+        self.titleForFooterSectionHandler = nil
+        self.numberOfSectionsHandler = nil
+        self.numberOfItemsInSectionHandler = nil
     }
 }

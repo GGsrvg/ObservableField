@@ -7,7 +7,13 @@
 
 import UIKit
 
-open class UICollectionViewAdapter<ODS: ObservableDataSourceSubscribe & ObservableDataSourceContent>: NSObject, UICollectionViewDataSource {
+open class UICollectionViewAdapter<ODS>:
+    NSObject,
+    UICollectionViewDataSource,
+    ObservableDataSourceDelegate,
+    Cancelable
+where ODS: ObservableDataSourceSubscribe & ObservableDataSourceContent {
+    private var _isCanceled: Bool = false
     
     open weak var collectionView: UICollectionView?
     
@@ -27,6 +33,7 @@ open class UICollectionViewAdapter<ODS: ObservableDataSourceSubscribe & Observab
         self.collectionView = collectionView
         self.observableDataSource = observableDataSource
         super.init()
+        observableDataSource.addCallback(self)
     }
     
     open func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -42,9 +49,8 @@ open class UICollectionViewAdapter<ODS: ObservableDataSourceSubscribe & Observab
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         fatalError("Need override this method")
     }
-}
-
-extension UICollectionViewAdapter: ObservableDataSourceDelegate {
+    
+    // MARK: - ObservableDataSourceDelegate
     open func reload() {
         self.collectionView?.reloadData()
     }
@@ -95,5 +101,23 @@ extension UICollectionViewAdapter: ObservableDataSourceDelegate {
     
     open func moveCell(at indexPath: IndexPath, to newIndexPath: IndexPath) {
         self.collectionView?.moveItem(at: indexPath, to: newIndexPath)
+    }
+    
+    // MARK: - Cancelable
+    public var isCanceled: Bool {
+        _isCanceled
+    }
+    
+    public func cancel() {
+        if isCanceled {
+            return
+        }
+        
+        defer {
+            _isCanceled = true
+        }
+        
+        self.collectionView = nil
+        self.observableDataSource = nil
     }
 }

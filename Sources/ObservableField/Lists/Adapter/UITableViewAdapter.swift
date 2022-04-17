@@ -10,7 +10,13 @@ import UIKit
 /// Abstract class
 ///
 /// You can use UITableViewClosureAdapter or inheritance
-open class UITableViewAdapter<ODS: ObservableDataSourceSubscribe & ObservableDataSourceContent>: NSObject, UITableViewDataSource {
+open class UITableViewAdapter<ODS>:
+    NSObject,
+    UITableViewDataSource,
+    ObservableDataSourceDelegate,
+    Cancelable
+where ODS: ObservableDataSourceSubscribe & ObservableDataSourceContent {
+    private var _isCanceled: Bool = false
     
     open weak var tableView: UITableView?
     
@@ -30,6 +36,12 @@ open class UITableViewAdapter<ODS: ObservableDataSourceSubscribe & ObservableDat
         self.tableView = tableView
         self.observableDataSource = observableDataSource
         super.init()
+        observableDataSource.addCallback(self)
+    }
+    
+    deinit {
+        self.tableView = nil
+        self.observableDataSource = nil
     }
     
     open func numberOfSections(in tableView: UITableView) -> Int {
@@ -45,9 +57,8 @@ open class UITableViewAdapter<ODS: ObservableDataSourceSubscribe & ObservableDat
     open func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         fatalError("Need override this method")
     }
-}
-
-extension UITableViewAdapter: ObservableDataSourceDelegate {
+    
+    // MARK: - ObservableDataSourceDelegate
     open func reload() {
         self.tableView?.reloadData()
     }
@@ -98,5 +109,23 @@ extension UITableViewAdapter: ObservableDataSourceDelegate {
     
     open func moveCell(at indexPath: IndexPath, to newIndexPath: IndexPath) {
         self.tableView?.moveRow(at: indexPath, to: newIndexPath)
+    }
+    
+    // MARK: - Cancelable
+    public var isCanceled: Bool {
+        _isCanceled
+    }
+    
+    public func cancel() {
+        if isCanceled {
+            return
+        }
+        
+        defer {
+            _isCanceled = true
+        }
+        
+        self.tableView = nil
+        self.observableDataSource = nil
     }
 }

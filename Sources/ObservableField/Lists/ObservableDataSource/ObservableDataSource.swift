@@ -27,6 +27,11 @@ open class ObservableDataSource<H, R, F> where R: Equatable {
         array = []
     }
     
+    deinit {
+        array.removeAll()
+        callbacks.removeAll()
+    }
+    
     public init(_ sequence: [SI]) {
         array = sequence
     }
@@ -34,11 +39,13 @@ open class ObservableDataSource<H, R, F> where R: Equatable {
     open subscript(index: Int) -> SI {
         array[index]
     }
+    
+    public var count: Int { array.count }
 }
 
 extension ObservableDataSource {
     /*open*/
-    func buildChanges(_ changeDataSource: () -> Void) {
+    public func buildChanges(_ changeDataSource: () -> Void) {
         arrayOfBuildChanges = []
         
         isBuildChanges = true
@@ -48,7 +55,7 @@ extension ObservableDataSource {
         initBuildChanges()
     }
     
-    func initBuildChanges() {
+    public func initBuildChanges() {
         defer {
             arrayOfBuildChanges = []
         }

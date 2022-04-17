@@ -14,6 +14,9 @@ open class ObservableArray<R> where R: Equatable {
     
     internal var array: [R]
     
+    internal var isBuildChanges: Bool = false
+    internal var arrayOfBuildChanges: [() -> Void] = []
+    
     public init() {
         array = []
     }
@@ -22,8 +25,38 @@ open class ObservableArray<R> where R: Equatable {
         array = sequence
     }
     
+    deinit {
+        array.removeAll()
+        callbacks.removeAll()
+    }
+    
     open subscript(index: Int) -> R {
         array[index]
+    }
+    
+    public var count: Int { array.count }
+}
+
+extension ObservableArray {
+    /*open*/
+    public func buildChanges(_ changeDataSource: () -> Void) {
+        arrayOfBuildChanges = []
+        
+        isBuildChanges = true
+        changeDataSource()
+        isBuildChanges = false
+        
+        initBuildChanges()
+    }
+    
+    public func initBuildChanges() {
+        defer {
+            arrayOfBuildChanges = []
+        }
+        
+        for change in arrayOfBuildChanges {
+            change()
+        }
     }
 }
 
@@ -112,8 +145,16 @@ extension ObservableArray {
 // work with updating
 extension ObservableArray {
     open func notifyReload() {
-        callbacks.forEach {
-            $0.reload()
+        func notify() {
+            callbacks.forEach {
+                $0.reload()
+            }
+        }
+        
+        if isBuildChanges {
+            arrayOfBuildChanges.append(notify)
+        } else {
+            notify()
         }
     }
     
@@ -142,26 +183,58 @@ extension ObservableArray {
     }
     
     open func notifyAddRow(at indexPaths: [IndexPath]) {
-        callbacks.forEach {
-            $0.addCells(at: indexPaths)
+        func notify() {
+            callbacks.forEach {
+                $0.addCells(at: indexPaths)
+            }
+        }
+        
+        if isBuildChanges {
+            arrayOfBuildChanges.append(notify)
+        } else {
+            notify()
         }
     }
     
     open func notifyInsertRow(at indexPaths: [IndexPath]) {
-        callbacks.forEach {
-            $0.insertCells(at: indexPaths)
+        func notify() {
+            callbacks.forEach {
+                $0.insertCells(at: indexPaths)
+            }
+        }
+        
+        if isBuildChanges {
+            arrayOfBuildChanges.append(notify)
+        } else {
+            notify()
         }
     }
     
     open func notifyUpdateRow(at indexPaths: [IndexPath]) {
-        callbacks.forEach {
-            $0.updateCells(at: indexPaths)
+        func notify() {
+            callbacks.forEach {
+                $0.updateCells(at: indexPaths)
+            }
+        }
+        
+        if isBuildChanges {
+            arrayOfBuildChanges.append(notify)
+        } else {
+            notify()
         }
     }
     
     open func notifyRemoveRow(at indexPaths: [IndexPath]) {
-        callbacks.forEach {
-            $0.removeCells(at: indexPaths)
+        func notify() {
+            callbacks.forEach {
+                $0.removeCells(at: indexPaths)
+            }
+        }
+        
+        if isBuildChanges {
+            arrayOfBuildChanges.append(notify)
+        } else {
+            notify()
         }
     }
 }

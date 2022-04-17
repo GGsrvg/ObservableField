@@ -1,7 +1,7 @@
 import XCTest
 @testable import ObservableField
 
-final class ObservableFieldTests: XCTestCase {
+final class ObservableDataSourceTests: XCTestCase {
     let tableView: UITableView = UITableView(frame: CGRect(x: 0, y: 0, width: 100, height: 1000))
     let observableDataSource = ObservableDataSource<String, String, String>()
     var adapter: UITableViewClosureAdapter<ObservableDataSource<String, String, String>>!
