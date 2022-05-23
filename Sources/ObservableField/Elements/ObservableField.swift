@@ -12,19 +12,19 @@ open class ObservableField<TV: Equatable> {
     public typealias NewValueHandler = (TV) -> Void
     
     private var _isCanceled: Bool = false
-    private var _value: TV
+    public private(set) var value: TV
     var handlers: [NewValueHandler] = []
     
     public init(_ value: TV) {
-        self._value = value
+        self.value = value
     }
     
     public func onNext(_ value: TV) {
-        if _value == value {
+        if self.value == value {
             return
         }
         
-        _value = value
+        self.value = value
         
         notifyHandlers()
     }
@@ -35,7 +35,7 @@ open class ObservableField<TV: Equatable> {
     
     func notifyHandlers() {
         handlers.forEach {
-            $0(self._value)
+            $0(self.value)
         }
     }
 }

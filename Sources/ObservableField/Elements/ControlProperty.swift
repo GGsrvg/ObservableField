@@ -12,9 +12,9 @@ import UIKit
 /// TC is control type
 /// TV is value type
 open class ControlProperty<TC, TV> where TC: UIControl, TV: Any {
-    typealias GetCallback = (TC) -> TV
-    typealias SetCallback = (TC, TV) -> Void
-    typealias NewValueHandler = (TV) -> Void
+    public typealias GetCallback = (TC) -> TV
+    public typealias SetCallback = (TC, TV) -> Void
+    public typealias NewValueHandler = (TV) -> Void
     
     let selector = #selector(eventHandler)
     
@@ -27,7 +27,7 @@ open class ControlProperty<TC, TV> where TC: UIControl, TV: Any {
     
     private var _isCanceled: Bool = false
     
-    init(
+    public init(
         control: TC,
         with events: UIControl.Event,
         get getCallback: @escaping GetCallback,
