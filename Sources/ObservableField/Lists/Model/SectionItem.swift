@@ -8,14 +8,15 @@
 import Foundation
 
 /**
- Its section in UITableView/UICollectionView
+ Its section in UITableView and UICollectionView
  
  H - Headeer
  R - Row
  F - Footer
  
  */
-open class SectionItem<H, R, F>: Equatable where R: Equatable {
+
+open class SectionItem<H, R, F>: SectionItemPrototype where R: Equatable {
     
     public static func == (lhs: SectionItem<H, R, F>, rhs: SectionItem<H, R, F>) -> Bool {
         lhs === rhs

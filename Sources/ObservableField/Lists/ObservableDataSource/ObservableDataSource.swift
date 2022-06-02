@@ -7,13 +7,7 @@
 
 import Foundation
 
-/**
- ObservableDataSource is an array wrapper that can notify Adapter of changes.
- 
- */
-open class ObservableDataSource<H, R, F> where R: Equatable {
-    
-    public typealias SI = SectionItem<H, R, F>
+open class ObservableDataSource<SI: SectionItemPrototype> {
     
     // TODO: change on Set<>
     internal var callbacks: [ObservableDataSourceDelegate] = []
@@ -40,7 +34,17 @@ open class ObservableDataSource<H, R, F> where R: Equatable {
         array[index]
     }
     
+    /**
+     Return count sections
+     */
     public var count: Int { array.count }
+    
+    /**
+     Return count rows in section
+     */
+    public func count(at index: Int) -> Int {
+        array[index].rows.count
+    }
 }
 
 extension ObservableDataSource {
@@ -67,18 +71,14 @@ extension ObservableDataSource {
 }
 
 extension ObservableDataSource: ObservableDataSourceContent {
-    open func numberOfSections() -> Int {
-        return array.count
-    }
+    open func numberOfSections() -> Int { self.count }
     
-    open func numberOfRowsInSection(_ section: Int) -> Int {
-        // No need to check the range, because if it's out of range, it's not working properly.
-        return array[section].rows.count
-    }
+    // No need to check the range, because if it's out of range, it's not working properly.
+    open func numberOfRowsInSection(_ section: Int) -> Int { self.count(at: section) }
     
+    // No need to check the range, because if it's out of range, it's not working properly.
     open func getRow(at indexPath: IndexPath) -> SI.Row? {
-        // No need to check the range, because if it's out of range, it's not working properly.
-        return self.array[indexPath.section].rows[indexPath.row]
+        self.array[indexPath.section].rows[indexPath.row]
     }
 }
 
