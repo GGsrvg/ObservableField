@@ -8,7 +8,7 @@
 import Foundation
 
 public struct DifferArrayOutput {
-    public struct MovedRow {
+    public struct MovedRow: Equatable {
         public let from: IndexPath
         public let to: IndexPath
         

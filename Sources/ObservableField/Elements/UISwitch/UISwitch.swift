@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UISwitch {
+public extension UISwitch {
     var observableIsOn: ControlProperty<UISwitch, Bool> {
         ControlProperty(
             control: self,

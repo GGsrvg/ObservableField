@@ -2,7 +2,7 @@
 //  CancelTests.swift
 //  
 //
-//  Created by Viktor on 21.06.2022.
+//  Created by GGsrvg on 21.06.2022.
 //
 
 import XCTest
@@ -48,5 +48,35 @@ class CancelTests: XCTestCase {
         container = nil
         XCTAssertTrue(object1.isCanceled)
         XCTAssertTrue(object2.isCanceled)
+    }
+    
+    func testControlProperty() {
+        let textField = UITextField()
+        let property = textField.observableText
+        var container: CancelContainer? = CancelContainer()
+        container?.activate([
+            property
+        ])
+        container = nil
+        XCTAssertTrue(property.isCanceled)
+        XCTAssertNil(property.control)
+        XCTAssertNil(property.getCallback)
+        XCTAssertNil(property.setCallback)
+        XCTAssertNil(property.newValueHandler)
+    }
+    
+    func testControlAction() {
+        let button = UIButton()
+        let action = button.addAction(events: .touchUpInside) { button in
+            
+        }
+        var container: CancelContainer? = CancelContainer()
+        container?.activate([
+            action
+        ])
+        container = nil
+        XCTAssertTrue(action.isCanceled)
+        XCTAssertTrue(action.control == nil)
+        XCTAssertTrue(action.action == nil)
     }
 }

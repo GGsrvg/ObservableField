@@ -2,7 +2,7 @@
 //  ObservableArrayTests.swift
 //  
 //
-//  Created by Viktor on 15.06.2022.
+//  Created by GGsrvg on 15.06.2022.
 //
 
 import XCTest
