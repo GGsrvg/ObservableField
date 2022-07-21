@@ -20,7 +20,7 @@ Field binding for MVVM
 `ControlProperty` is an object for tracking changes and inserting new values.
 `ControlAction` is an object for tracking actions.
 
-### You can link objects in three ways:
+### You can bind objects in three ways:
 - -->: Data is only sent from the View.
 - <--: Data is only sent from the code.
 - <->: Data can be sent from View and code.
@@ -36,9 +36,48 @@ ViewController
     
 override func viewDidLoad() {
     super.viewDidLoad()
-    // linking object
+    // binding object
     cancelContainer.activate([
         searchBar.searchTextField.observableText --> viewModel.observableSearch
+    ])
+}
+
+```
+
+### Bind UITableView and UICollectionView
+
+ViewModel
+```
+let observableArray = ObservableArray<String>()
+```
+
+ViewController
+```
+@IBOutlet weak var tableView: UITableView!
+    
+override func viewDidLoad() {
+    super.viewDidLoad()
+    // init adapter for UITableView 
+    // Pass a reference to `UITableView`
+    // Pass the data source
+    // And set the display of the cell.
+    adapter = UITableViewClosureAdapter(
+        tableView,
+        observableDataSource: viewModel.observableArray,
+        cellForRowHandler: { tableView, indexPath, row in
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
+            cell.textLabel?.text = row
+            return cell
+        },
+        titleForHeaderSectionHandler: nil,
+        titleForFooterSectionHandler: nil,
+        numberOfSectionsHandler: nil,
+        numberOfItemsInSectionHandler: nil
+    )
+    tableView.dataSource = adapter
+    // Finally, pass the adapter to `CancelContainer` to clean up links automatically.
+    cancelContainer.activate([
+        adapter
     ])
 }
 
