@@ -24,6 +24,14 @@ open class Binding<TC, TV> where TC: UIControl, TV: Equatable {
     }
     
     private var _isCanceled: Bool = false
+    private lazy var handler = Handler<TV>(name: "Binding TC = \(TC.self) TV = \(TV.self)") {
+        [weak self] value in
+        
+        guard let self else { return }
+        
+        self.property.set(value)
+    }
+    
     
     var directionType: DirectionType
     var property: ControlProperty<TC, TV>
@@ -48,25 +56,21 @@ open class Binding<TC, TV> where TC: UIControl, TV: Equatable {
         case .fromObservable:
             setBindingFromObservable()
         case .fromAll:
-            setBindingFromAll()
+            setBindingFromProperty()
+            setBindingFromObservable()
         }
     }
     
     func setBindingFromProperty() {
-        self.property.newValueHandler = { newValue in
+        self.property.newValueHandler = { [weak self] newValue in
+            guard let self else { return }
+            
             self.observable.onNext(newValue)
         }
     }
     
     func setBindingFromObservable() {
-        self.observable.subscibe { value in
-            self.property.set(value)
-        }
-    }
-    
-    func setBindingFromAll() {
-        setBindingFromProperty()
-        setBindingFromObservable()
+        self.observable.subscibe(handler)
     }
 }
 
@@ -84,7 +88,7 @@ extension Binding: Cancelable {
             _isCanceled = true
         }
         
-        property.cancel()
-        observable.cancel()
+        self.property.newValueHandler = nil
+        self.observable.unsubscribe(self.handler)
     }
 }

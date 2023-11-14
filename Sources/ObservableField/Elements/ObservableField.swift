@@ -12,11 +12,9 @@ import Foundation
  It simple observable.
  */
 open class ObservableField<TV: Equatable> {
-    public typealias NewValueHandler = (TV) -> Void
-    
     private var _isCanceled: Bool = false
     public private(set) var value: TV
-    var handlers: [NewValueHandler] = []
+    private var handlers: [Handler<TV>] = []
     
     public init(_ value: TV) {
         self.value = value
@@ -32,13 +30,19 @@ open class ObservableField<TV: Equatable> {
         notifyHandlers()
     }
     
-    public func subscibe(_ handler: @escaping NewValueHandler) {
+    public func subscibe(_ handler: Handler<TV>) {
         handlers.append(handler)
+    }
+    
+    public func unsubscribe(_ handler: Handler<TV>) {
+        handlers.removeAll { _handler in
+            _handler === handler
+        }
     }
     
     func notifyHandlers() {
         handlers.forEach {
-            $0(self.value)
+            $0.call(value: self.value)
         }
     }
 }

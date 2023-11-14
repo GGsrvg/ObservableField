@@ -17,7 +17,10 @@ import Foundation
  
  ObservableDataSource stores all data in RAM.
  */
-open class ObservableDataSource<SI: SectionItemPrototype> {
+open class ObservableDataSource<SI: SectionItemPrototype>:
+    ObservableDataSourceContent,
+    ObservableDataSourceSubscribe
+{
     
     // TODO: change Array on Set
     internal var callbacks: [ObservableDataSourceDelegate] = []
@@ -56,9 +59,7 @@ open class ObservableDataSource<SI: SectionItemPrototype> {
     public func count(at index: Int) -> Int {
         array[index].rows.count
     }
-}
-
-extension ObservableDataSource {
+    
     /**
      When you know what needs to be changed and in what order.
      Unlike setAndUpdateDiffable, this does not require diffing.
@@ -68,9 +69,8 @@ extension ObservableDataSource {
         changeDataSource()
         callbacks.forEach { $0.commitCollectingBatchUpdate() }
     }
-}
-
-extension ObservableDataSource: ObservableDataSourceContent {
+    
+    // MARK: - ObservableDataSourceContent
     open func numberOfSections() -> Int { self.count }
     
     // No need to check the range, because if it's out of range, it's not working properly.
@@ -80,9 +80,8 @@ extension ObservableDataSource: ObservableDataSourceContent {
     open func getRow(at indexPath: IndexPath) -> SI.Row? {
         self.array[indexPath.section].rows[indexPath.row]
     }
-}
-
-extension ObservableDataSource: ObservableDataSourceSubscribe {
+    
+    // MARK: - ObservableDataSourceSubscribe
     open func addCallback(_ callback: ObservableDataSourceDelegate) {
         guard !callbacks.contains(where: { $0 === callback })
         else { return }
@@ -93,12 +92,11 @@ extension ObservableDataSource: ObservableDataSourceSubscribe {
     open func removeCallback(_ callback: ObservableDataSourceDelegate) {
         callbacks.removeAll(where: { $0 === callback })
     }
-}
+    
 
-// work with array
-// Basic functionality on array
-// this functions can call notify for update
-extension ObservableDataSource {
+    // work with array
+    // Basic functionality on array
+    // this functions can call notify for update
     // MARK: -
     open func set(_ elements: [SI]) {
         array = elements
@@ -208,10 +206,8 @@ extension ObservableDataSource {
             indexPath
         ])
     }
-}
 
-// work with updating
-extension ObservableDataSource {
+    // work with updating
     open func notifyReload() {
         callbacks.forEach {
             $0.reload()
@@ -277,10 +273,8 @@ extension ObservableDataSource {
             $0.moveCell(at: indexPath, to: newIndexPath)
         }
     }
-}
 
-// MARK: - Differ
-extension ObservableDataSource {
+    // MARK: - Differ
     open func setAndUpdateDiffable(_ elements: [SI]) {
         // check on empty all
         // if empty do nothing

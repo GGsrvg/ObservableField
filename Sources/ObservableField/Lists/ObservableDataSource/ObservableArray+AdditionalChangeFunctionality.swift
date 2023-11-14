@@ -11,42 +11,42 @@ import Foundation
 // functions cant call notify for update
 extension ObservableArray {
     
-    open func insertRows(_ rows: [Row], before row: Row) {
+    public func insertRows(_ rows: [Row], before row: Row) {
         guard let indexPath = self.findRowIndexPath(row) else { return }
         
         self.insertRows(rows, at: indexPath.row)
     }
     
-    open func insertRows(_ rows: [Row], after row: Row) {
+    public func insertRows(_ rows: [Row], after row: Row) {
         guard let indexPath = self.findRowIndexPath(row) else { return }
         
         self.insertRows(rows, at: indexPath.row + 1)
     }
     
-    open func insertRows(_ rows: [Row], beforeFirst predicate: (Row) throws -> Bool) {
+    public func insertRows(_ rows: [Row], beforeFirst predicate: (Row) throws -> Bool) {
         guard let indexPath = self.findRowIndexPath(when: predicate) else { return }
         
         self.insertRows(rows, at: indexPath.row)
     }
     
-    open func insertRows(_ rows: [Row], afterFirst predicate: (Row) throws -> Bool) {
+    public func insertRows(_ rows: [Row], afterFirst predicate: (Row) throws -> Bool) {
         guard let indexPath = self.findRowIndexPath(when: predicate) else { return }
         
         self.insertRows(rows, at: indexPath.row + 1)
     }
     
-    open func replaceRow(_ newRow: Row, oldRow: Row) {
+    public func replaceRow(_ newRow: Row, oldRow: Row) {
         guard let indexPath = self.findRowIndexPath(oldRow)
         else { return }
         
         self.replaceRow(newRow, at: indexPath.row)
     }
     
-    open func reloadRow(_ row: Row) {
+    public func reloadRow(_ row: Row) {
         self.replaceRow(row, oldRow: row)
     }
     
-    open func deleteRow(_ row: Row) {
+    public func deleteRow(_ row: Row) {
         guard let indexPath = self.findRowIndexPath(row)
         else { return }
         

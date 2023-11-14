@@ -16,7 +16,10 @@ import Foundation
  
  ObservableArray stores all data in RAM.
  */
-open class ObservableArray<R> where R: Hashable {
+open class ObservableArray<R>:
+    ObservableDataSourceContent,
+    ObservableDataSourceSubscribe
+where R: Hashable {
     
     public typealias Row = R
     
@@ -45,9 +48,7 @@ open class ObservableArray<R> where R: Hashable {
     }
     
     public var count: Int { array.count }
-}
-
-extension ObservableArray {
+    
     /**
      When you know what needs to be changed and in what order.
      Unlike setAndUpdateDiffable, this does not require diffing.
@@ -57,9 +58,8 @@ extension ObservableArray {
         changeDataSource()
         callbacks.forEach { $0.commitCollectingBatchUpdate() }
     }
-}
-
-extension ObservableArray: ObservableDataSourceContent {
+    
+    // MARK: - ObservableDataSourceContent
     open func numberOfSections() -> Int {
         return 1
     }
@@ -73,9 +73,8 @@ extension ObservableArray: ObservableDataSourceContent {
         // No need to check the range, because if it's out of range, it's not working properly.
         return self[indexPath.row]
     }
-}
-
-extension ObservableArray: ObservableDataSourceSubscribe {
+    
+    // MARK: - ObservableDataSourceSubscribe
     open func addCallback(_ callback: ObservableDataSourceDelegate) {
         guard !callbacks.contains(where: { $0 === callback })
         else { return }
@@ -86,12 +85,10 @@ extension ObservableArray: ObservableDataSourceSubscribe {
     open func removeCallback(_ callback: ObservableDataSourceDelegate) {
         callbacks.removeAll(where: { $0 === callback })
     }
-}
-
-// work with array
-// Basic functionality on array
-// this functions can call notify for update
-extension ObservableArray {
+    
+    // work with array
+    // Basic functionality on array
+    // this functions can call notify for update
     // MARK: -
     open func set(_ elements: [Row]) {
         array = elements
@@ -106,6 +103,7 @@ extension ObservableArray {
         array = []
         notifyReload()
     }
+    
     // MARK: - Append row
     open func appendRows(_ rows: [Row]) {
         let lastIndexPath = IndexPath(row: array.count - 1, section: 0)
@@ -139,10 +137,8 @@ extension ObservableArray {
         array.remove(at: index)
         notifyDeleteRow(at: [ IndexPath(row: index, section: 0) ])
     }
-}
-
-// work with updating
-extension ObservableArray {
+    
+    // MARK: - work with updating
     open func notifyReload() {
         callbacks.forEach {
             $0.reload()
@@ -172,10 +168,8 @@ extension ObservableArray {
             $0.moveCell(at: indexPath, to: newIndexPath)
         }
     }
-}
-
-// MARK: - Differ
-extension ObservableArray {
+    
+    // MARK: - Differ
     open func setAndUpdateDiffable(_ elements: [Row]) {
         // check on empty all
         // if empty do nothing

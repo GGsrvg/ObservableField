@@ -9,28 +9,28 @@ import Foundation
 
 // sugar
 extension ObservableDataSource {
-    open func findSectionIndex(_ section: SI) -> Int? {
+    public func findSectionIndex(_ section: SI) -> Int? {
         guard let index = self.array.firstIndex(of: section)
         else { return nil }
         
         return index
     }
     
-    open func findSectionIndex(when predicate: (SI) throws -> Bool) -> Int? {
+    public func findSectionIndex(when predicate: (SI) throws -> Bool) -> Int? {
         guard let index = try? self.array.firstIndex(where: predicate)
         else { return nil }
         
         return index
     }
     
-    open func findSection(when predicate: (SI) throws -> Bool) -> SI? {
+    public func findSection(when predicate: (SI) throws -> Bool) -> SI? {
         guard let index = try? self.array.firstIndex(where: predicate)
         else { return nil }
         
         return self[index]
     }
     
-    open func findRowIndexPath(_ elementRow: SI.Row) -> IndexPath? {
+    public func findRowIndexPath(_ elementRow: SI.Row) -> IndexPath? {
         for (sectionIndex, section) in self.array.enumerated() {
             for (rowIndex, row) in section.rows.enumerated() {
                 if row == elementRow {
@@ -41,7 +41,7 @@ extension ObservableDataSource {
         return nil
     }
     
-    open func findRowIndexPath(when predicate: (SI.Row) throws -> Bool) -> IndexPath? {
+    public func findRowIndexPath(when predicate: (SI.Row) throws -> Bool) -> IndexPath? {
         for (sectionIndex, section) in self.array.enumerated() {
             for (rowIndex, row) in section.rows.enumerated() {
                 if let result = try? predicate(row), result {
@@ -52,7 +52,7 @@ extension ObservableDataSource {
         return nil
     }
     
-    open func findRow(when predicate: (SI.Row) throws -> Bool) -> SI.Row? {
+    public func findRow(when predicate: (SI.Row) throws -> Bool) -> SI.Row? {
         for (_, section) in self.array.enumerated() {
             for (_, row) in section.rows.enumerated() {
                 if let result = try? predicate(row), result {
