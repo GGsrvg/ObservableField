@@ -171,7 +171,7 @@ open class ObservableDataSource<SI: SectionItemPrototype>:
     }
     // MARK: - Append row
     open func appendRows(_ rows: [SI.Row], by sectionIndex: Int) {
-        let indexPath = IndexPath(row: array[sectionIndex].rows.count - 1, section: sectionIndex)
+        let indexPath = IndexPath(row: array[sectionIndex].rows.count, section: sectionIndex)
         array[sectionIndex].rows += rows
         var addIndexPaths: [IndexPath] = []
         for (index, _) in rows.enumerated() {

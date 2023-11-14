@@ -106,7 +106,7 @@ where R: Hashable {
     
     // MARK: - Append row
     open func appendRows(_ rows: [Row]) {
-        let lastIndexPath = IndexPath(row: array.count - 1, section: 0)
+        let lastIndexPath = IndexPath(row: array.count, section: 0)
         array += rows
         var addIndexPaths: [IndexPath] = []
         for (index, _) in rows.enumerated() {

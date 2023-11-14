@@ -226,4 +226,24 @@ final class ObservableDataSourceTests: XCTestCase {
             XCTAssertEqual(self.observableDataSource.array, sortedArray)
         }
     }
+    
+    func testRow() {
+        let section = Section(header: "", rows: [], footer: "")
+        
+        self.observableDataSource.appendSection(section)
+        
+        let sectionIndex = self.observableDataSource.findSectionIndex(section)!
+        
+        self.observableDataSource.appendRows(["2"], by: sectionIndex)
+        XCTAssert(section.rows == ["2"])
+        self.observableDataSource.appendRows(["4"], by: sectionIndex)
+        XCTAssert(section.rows == ["2", "4"])
+        self.observableDataSource.deleteRow(indexPath: IndexPath(item: 1, section: sectionIndex))
+        self.observableDataSource.insertRows(["1"], by: IndexPath(item: 0, section: sectionIndex))
+        XCTAssert(section.rows == ["1", "2"])
+        self.observableDataSource.replaceRow("0", indexPath: IndexPath(item: 0, section: sectionIndex))
+        XCTAssert(section.rows == ["0", "2"])
+        self.observableDataSource.deleteRow(indexPath: IndexPath(item: 0, section: sectionIndex))
+        XCTAssert(section.rows == ["2"])
+    }
 }
