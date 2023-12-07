@@ -8,10 +8,10 @@
 import UIKit
 
 public extension UISwitch {
-    var observableIsOn: ControlProperty<UISwitch, Bool> {
+    var isOnControlProperty: ControlProperty<UISwitch, Bool> {
         ControlProperty(
             control: self,
-            with: [.editingChanged],
+            with: [.valueChanged],
             get: { switchControl in
                 switchControl.isOn
             },

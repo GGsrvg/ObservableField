@@ -13,7 +13,10 @@ public class Handler<V: Equatable> {
     let name: String
     private let valueHandler: ValueHandler
     
-    public init(name: String, valueHandler: @escaping ValueHandler) {
+    public init(
+        name: String = UUID().uuidString,
+        valueHandler: @escaping ValueHandler
+    ) {
         self.name = name
         self.valueHandler = valueHandler
     }

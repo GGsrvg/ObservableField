@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_12" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BindingViewController" customModule="Sample" customModuleProvider="target">
+            <connections>
+                <outlet property="colorWell" destination="udn-ZD-HVF" id="Qr2-tR-AQY"/>
+                <outlet property="datePicker" destination="6bG-qT-ySP" id="rMb-Pe-8Qs"/>
+                <outlet property="isOnSwitch" destination="MeR-fu-WtO" id="pC2-Ij-cSc"/>
+                <outlet property="label" destination="ORB-St-c1H" id="R0i-CG-yS5"/>
+                <outlet property="pageControl" destination="8KU-DW-hkn" id="gfG-sD-Kri"/>
+                <outlet property="segmented" destination="Of6-BY-eDK" id="f5l-hg-LuO"/>
+                <outlet property="slider" destination="Abu-qv-Sup" id="SqM-b0-tfu"/>
+                <outlet property="textField" destination="E4h-HO-5zi" id="Zyv-Hl-vdY"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Text" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="E4h-HO-5zi">
+                    <rect key="frame" x="16" y="75" width="361" height="34"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                </textField>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Switch" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WHo-Sa-P5H">
+                    <rect key="frame" x="16" y="121" width="296" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MeR-fu-WtO">
+                    <rect key="frame" x="328" y="121" width="51" height="31"/>
+                </switch>
+                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Of6-BY-eDK">
+                    <rect key="frame" x="16" y="158" width="361" height="32"/>
+                    <segments>
+                        <segment title="First"/>
+                        <segment title="Second"/>
+                    </segments>
+                </segmentedControl>
+                <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" translatesAutoresizingMaskIntoConstraints="NO" id="6bG-qT-ySP">
+                    <rect key="frame" x="16" y="205" width="361" height="36"/>
+                </datePicker>
+                <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="23" minValue="0.0" maxValue="100" translatesAutoresizingMaskIntoConstraints="NO" id="Abu-qv-Sup">
+                    <rect key="frame" x="14" y="257" width="365" height="31"/>
+                </slider>
+                <colorWell contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="udn-ZD-HVF">
+                    <rect key="frame" x="16" y="303" width="361" height="28"/>
+                </colorWell>
+                <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" defersCurrentPageDisplay="YES" numberOfPages="11" translatesAutoresizingMaskIntoConstraints="NO" id="8KU-DW-hkn">
+                    <rect key="frame" x="16" y="347" width="361" height="26"/>
+                    <color key="pageIndicatorTintColor" systemColor="systemYellowColor"/>
+                    <color key="currentPageIndicatorTintColor" systemColor="systemBlueColor"/>
+                </pageControl>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ORB-St-c1H">
+                    <rect key="frame" x="16" y="385" width="361" height="20.333333333333314"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <constraints>
+                <constraint firstItem="8KU-DW-hkn" firstAttribute="top" secondItem="udn-ZD-HVF" secondAttribute="bottom" constant="16" id="14h-pp-xtQ"/>
+                <constraint firstItem="ORB-St-c1H" firstAttribute="top" secondItem="8KU-DW-hkn" secondAttribute="bottom" constant="12" id="1YN-XT-Adp"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="ORB-St-c1H" secondAttribute="bottom" constant="12" id="1bP-9g-AzH"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="ORB-St-c1H" secondAttribute="trailing" constant="16" id="2o8-7z-lgn"/>
+                <constraint firstItem="Abu-qv-Sup" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="3wX-b6-Fgc"/>
+                <constraint firstItem="8KU-DW-hkn" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="4uj-iK-gl5"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="MeR-fu-WtO" secondAttribute="trailing" constant="16" id="93A-PM-T58"/>
+                <constraint firstItem="Of6-BY-eDK" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="F1N-hf-NK6"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Abu-qv-Sup" secondAttribute="trailing" constant="16" id="Fa6-En-mnw"/>
+                <constraint firstItem="ORB-St-c1H" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="Fn3-Xa-1a5"/>
+                <constraint firstItem="udn-ZD-HVF" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="FqM-GA-fne"/>
+                <constraint firstItem="6bG-qT-ySP" firstAttribute="top" secondItem="Of6-BY-eDK" secondAttribute="bottom" constant="16" id="LXO-rT-E9B"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="8KU-DW-hkn" secondAttribute="trailing" constant="16" id="OMw-qv-jgm"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="udn-ZD-HVF" secondAttribute="trailing" constant="16" id="T9i-d1-1Ps"/>
+                <constraint firstItem="WHo-Sa-P5H" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="YZ6-3E-rLi"/>
+                <constraint firstItem="6bG-qT-ySP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" constant="16" id="Z2P-ib-hZ9"/>
+                <constraint firstItem="udn-ZD-HVF" firstAttribute="top" secondItem="Abu-qv-Sup" secondAttribute="bottom" constant="16" id="aQ7-GY-gFa"/>
+                <constraint firstItem="E4h-HO-5zi" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="16" id="dvd-as-j97"/>
+                <constraint firstItem="WHo-Sa-P5H" firstAttribute="top" secondItem="E4h-HO-5zi" secondAttribute="bottom" constant="12" id="fMk-rW-EYD"/>
+                <constraint firstItem="Abu-qv-Sup" firstAttribute="top" secondItem="6bG-qT-ySP" secondAttribute="bottom" constant="16" id="fdf-uf-F1s"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Of6-BY-eDK" secondAttribute="trailing" constant="16" id="i0E-Lj-E9x"/>
+                <constraint firstItem="Of6-BY-eDK" firstAttribute="top" secondItem="WHo-Sa-P5H" secondAttribute="bottom" constant="16" id="lP2-ME-9Oa"/>
+                <constraint firstItem="MeR-fu-WtO" firstAttribute="top" secondItem="E4h-HO-5zi" secondAttribute="bottom" constant="12" id="lYl-1f-x39"/>
+                <constraint firstItem="E4h-HO-5zi" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="16" id="lfk-3s-7Wp"/>
+                <constraint firstItem="MeR-fu-WtO" firstAttribute="leading" secondItem="WHo-Sa-P5H" secondAttribute="trailing" constant="16" id="vUG-pu-Ge0"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="E4h-HO-5zi" secondAttribute="trailing" constant="16" id="wI0-vc-mXt"/>
+                <constraint firstAttribute="trailing" secondItem="6bG-qT-ySP" secondAttribute="trailing" constant="16" id="wbD-hC-6Qu"/>
+            </constraints>
+            <point key="canvasLocation" x="138" y="21"/>
+        </view>
+    </objects>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemYellowColor">
+            <color red="1" green="0.80000000000000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

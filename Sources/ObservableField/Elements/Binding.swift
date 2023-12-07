@@ -7,23 +7,26 @@
 
 import Foundation
 import UIKit
+import Combine
 
 /**
- Associating a UIControl property with an ObservableField.
+ Associating a UIControl property with an Subejct.
  
  There are 3 types of data transfer available:
  - fromProperty: data will only come from UIControl
- - fromObservable: data will only come from Observable
- - fromAll: data will come from UIControl and Observable
+ - fromSubject: data will only come from Subject
+ - fromAll: data will come from UIControl and Subject
+ 
+ TC - Type of Control
+ TV - Type of Value
  */
-open class Binding<TC, TV> where TC: UIControl, TV: Equatable {
+open class Binding<TC, TV>: Cancellable where TC: UIControl, TV: Equatable {
     public enum DirectionType {
         case fromProperty
-        case fromObservable
+        case fromSubject
         case fromAll
     }
     
-    private var _isCanceled: Bool = false
     private lazy var handler = Handler<TV>(name: "Binding TC = \(TC.self) TV = \(TV.self)") {
         [weak self] value in
         
@@ -33,18 +36,20 @@ open class Binding<TC, TV> where TC: UIControl, TV: Equatable {
     }
     
     
-    var directionType: DirectionType
-    var property: ControlProperty<TC, TV>
-    var observable: ObservableField<TV>
+    let directionType: DirectionType
+    let property: ControlProperty<TC, TV>
+    unowned var subject: any Subject<TV, Error>
+    
+    private let cancelContainer = CancelContainer()
     
     public init(
         type directionType: DirectionType,
         property: ControlProperty<TC, TV>,
-        observable: ObservableField<TV>
+        subject: any Subject<TV, Error>
     ) {
         self.directionType = directionType
         self.property = property
-        self.observable = observable
+        self.subject = subject
         
         self.configureBinding()
     }
@@ -52,43 +57,71 @@ open class Binding<TC, TV> where TC: UIControl, TV: Equatable {
     func configureBinding() {
         switch directionType {
         case .fromProperty:
+            setValueFromProperty()
+            
             setBindingFromProperty()
-        case .fromObservable:
-            setBindingFromObservable()
+        case .fromSubject:
+            setValueFromSubject()
+            
+            setBindingFromSubject()
         case .fromAll:
+            setValueFromSubject()
+            
             setBindingFromProperty()
-            setBindingFromObservable()
+            setBindingFromSubject()
         }
     }
     
-    func setBindingFromProperty() {
+    private func setBindingFromProperty() {
         self.property.newValueHandler = { [weak self] newValue in
             guard let self else { return }
             
-            self.observable.onNext(newValue)
+            self.subject.send(newValue)
         }
     }
     
-    func setBindingFromObservable() {
-        self.observable.subscibe(handler)
-    }
-}
+    private func setBindingFromSubject() {
+        self.subject
+            .sink { completion in
+                switch completion {
+                case .finished:
+                    print("\(#function) finished")
+                case .failure(let fail):
+                    print("\(#function) has a problem \(fail.localizedDescription)")
+                }
+            } receiveValue: { [weak self] output in
+                guard let self else { return }
+                
+                self.handler.call(value: output)
+            }
+            .store(in: self.cancelContainer)
 
-extension Binding: Cancelable {
-    public var isCanceled: Bool {
-        _isCanceled
     }
+    
+    private func setValueFromProperty() {
+        let control = property.control
+        if let value = property.getCallback?(control) {
+            self.subject.send(value)
+        }
+    }
+    
+    private func setValueFromSubject() {
+        let control = property.control
+        if let valueSubject = self.subject as? CurrentValueSubject<TV, Error> {
+            property.setCallback?(control, valueSubject.value)
+        }
+    }
+    
+    // MARK: - Cancellable
+    public private(set) var isCanceled: Bool = false
     
     public func cancel() {
-        if isCanceled {
-            return
-        }
-        
-        defer {
-            _isCanceled = true
-        }
+        if isCanceled { return }
+        isCanceled = true
         
         self.property.newValueHandler = nil
-        self.observable.unsubscribe(self.handler)
+        self.subject.send(completion: .finished)
+        
+        self.cancelContainer.cancel()
     }
 }

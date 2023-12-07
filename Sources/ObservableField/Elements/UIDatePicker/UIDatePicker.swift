@@ -8,7 +8,7 @@
 import UIKit
 
 public extension UIDatePicker {
-    var observableDate: ControlProperty<UIDatePicker, Date> {
+    var dateControlProperty: ControlProperty<UIDatePicker, Date> {
         ControlProperty(
             control: self,
             with: [.valueChanged],

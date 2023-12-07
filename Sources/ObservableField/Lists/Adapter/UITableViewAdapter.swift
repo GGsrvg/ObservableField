@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 /// Abstract class
 ///
@@ -14,7 +15,7 @@ open class UITableViewAdapter<ODS>:
     NSObject,
     UITableViewDataSource,
     ObservableDataSourceDelegate,
-    Cancelable
+    Cancellable
 where ODS: ObservableDataSourceSubscribe,
       ODS: ObservableDataSourceContent {
     private var _isCanceled: Bool = false

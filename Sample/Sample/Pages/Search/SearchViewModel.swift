@@ -7,11 +7,14 @@
 
 import Foundation
 import ObservableField
+import Combine
 
 class SearchViewModel {
+    private let cancelContainer = CancelContainer()
+    
     private let names: [String]
     
-    let observableSearch = ObservableField<String?>(nil)
+    let searchSubject = PassthroughSubject<String?, Error>.init()
     let observableArray = ObservableArray<String>()
     
     init() {
@@ -32,9 +35,18 @@ class SearchViewModel {
             self.names = []
             print(error.localizedDescription)
         }
-        self.observableSearch.subscibe { name in
-            self.filter(by: name)
-        }
+        
+        self.searchSubject
+            .debounce(for: .milliseconds(500), scheduler: RunLoop.current)
+            .sink { completion in
+                
+            } receiveValue: { [weak self] name in
+                guard let self else { return }
+                
+                self.filter(by: name)
+            }
+            .store(in: cancelContainer)
+
     }
     
     deinit {

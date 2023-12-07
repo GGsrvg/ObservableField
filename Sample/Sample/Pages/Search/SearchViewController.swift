@@ -5,8 +5,10 @@
 //  Created by Viktor on 17.04.2022.
 //
 
+import Foundation
 import UIKit
 import ObservableField
+import Combine
 
 class SearchViewController: UIViewController {
 
@@ -43,7 +45,7 @@ class SearchViewController: UIViewController {
         tableView.dataSource = adapter
         
         cancelContainer.activate([
-            searchBar.searchTextField.observableText --> viewModel.observableSearch,
+            searchBar.searchTextField.textControlProperty --> viewModel.searchSubject,
             adapter,
         ])
     }

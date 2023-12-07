@@ -54,6 +54,13 @@ class ViewController: UIViewController {
                     navigationController.pushViewController(vc, animated: true)
                 }
             ),
+            SampleItem(
+                name: "Binding",
+                action: {
+                    let vc = BindingViewController()
+                    navigationController.pushViewController(vc, animated: true)
+                }
+            ),
         ]
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")

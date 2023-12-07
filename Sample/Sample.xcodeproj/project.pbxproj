@@ -3,10 +3,13 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5B2D362B2B1C631A00CF1350 /* BindingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B2D36292B1C631A00CF1350 /* BindingViewController.swift */; };
+		5B2D362C2B1C631A00CF1350 /* BindingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5B2D362A2B1C631A00CF1350 /* BindingViewController.xib */; };
+		5B2D362E2B1C650B00CF1350 /* BindingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B2D362D2B1C650B00CF1350 /* BindingViewModel.swift */; };
 		77A204B1287887180089878B /* ColorSortSectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A204AF287887180089878B /* ColorSortSectionsViewController.swift */; };
 		77A204B2287887180089878B /* ColorSortSectionsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 77A204B0287887180089878B /* ColorSortSectionsViewController.xib */; };
 		77A204B4287887A90089878B /* ColorSortSectionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77A204B3287887A90089878B /* ColorSortSectionsViewModel.swift */; };
@@ -37,6 +40,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5B2D36292B1C631A00CF1350 /* BindingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingViewController.swift; sourceTree = "<group>"; };
+		5B2D362A2B1C631A00CF1350 /* BindingViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BindingViewController.xib; sourceTree = "<group>"; };
+		5B2D362D2B1C650B00CF1350 /* BindingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BindingViewModel.swift; sourceTree = "<group>"; };
 		77A204AF287887180089878B /* ColorSortSectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSortSectionsViewController.swift; sourceTree = "<group>"; };
 		77A204B0287887180089878B /* ColorSortSectionsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColorSortSectionsViewController.xib; sourceTree = "<group>"; };
 		77A204B3287887A90089878B /* ColorSortSectionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSortSectionsViewModel.swift; sourceTree = "<group>"; };
@@ -80,6 +86,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5B2D36282B1C630700CF1350 /* Binding */ = {
+			isa = PBXGroup;
+			children = (
+				5B2D362D2B1C650B00CF1350 /* BindingViewModel.swift */,
+				5B2D36292B1C631A00CF1350 /* BindingViewController.swift */,
+				5B2D362A2B1C631A00CF1350 /* BindingViewController.xib */,
+			);
+			path = Binding;
+			sourceTree = "<group>";
+		};
 		77A204AE287887020089878B /* ColorSortSections */ = {
 			isa = PBXGroup;
 			children = (
@@ -137,9 +153,9 @@
 		77BCC2ED28020998000D83EE /* Pages */ = {
 			isa = PBXGroup;
 			children = (
+				5B2D36282B1C630700CF1350 /* Binding */,
 				77A204AE287887020089878B /* ColorSortSections */,
 				77CC1C0C285B113F003E5BF4 /* DiffTableView */,
-				77D33B36280C577D005CF4BD /* DoubleField */,
 				77D33B31280C22B9005CF4BD /* Search */,
 				77DD9C1A2874AF55003881E6 /* ColorSortCollectionView */,
 				77BCC2EF28020A4A000D83EE /* ColorSort */,
@@ -202,13 +218,6 @@
 			path = Search;
 			sourceTree = "<group>";
 		};
-		77D33B36280C577D005CF4BD /* DoubleField */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = DoubleField;
-			sourceTree = "<group>";
-		};
 		77DD9C1A2874AF55003881E6 /* ColorSortCollectionView */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,7 +267,7 @@
 				};
 			};
 			buildConfigurationList = 77BCC2CF28018240000D83EE /* Build configuration list for PBXProject "Sample" */;
-			compatibilityVersion = "Xcode 13.0";
+			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -284,6 +293,7 @@
 				77DD9C1E2874AF85003881E6 /* ColorSortCollectionViewController.xib in Resources */,
 				77BCC2E428018241000D83EE /* LaunchScreen.storyboard in Resources */,
 				77DD9C192874A39D003881E6 /* DiffTableViewController.xib in Resources */,
+				5B2D362C2B1C631A00CF1350 /* BindingViewController.xib in Resources */,
 				77BCC2E128018241000D83EE /* Assets.xcassets in Resources */,
 				77EE74872872214600D330B6 /* fullNames.txt in Resources */,
 				77DD9C1128749FFB003881E6 /* ColorSortViewController.xib in Resources */,
@@ -305,8 +315,10 @@
 				77CC1C10285B11A6003E5BF4 /* DiffTableViewViewModel.swift in Sources */,
 				77BCC2F628020AFC000D83EE /* UIColor.swift in Sources */,
 				77BCC2F328020AA8000D83EE /* ColorSortViewModel.swift in Sources */,
+				5B2D362B2B1C631A00CF1350 /* BindingViewController.swift in Sources */,
 				77A204B4287887A90089878B /* ColorSortSectionsViewModel.swift in Sources */,
 				77DD9C142874A0D8003881E6 /* SearchViewController.swift in Sources */,
+				5B2D362E2B1C650B00CF1350 /* BindingViewModel.swift in Sources */,
 				77DD9C1028749FFB003881E6 /* ColorSortViewController.swift in Sources */,
 				77A204B7287897320089878B /* TitleCollectionReusableView.swift in Sources */,
 				77BCC2D828018240000D83EE /* AppDelegate.swift in Sources */,
@@ -472,7 +484,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -501,7 +513,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

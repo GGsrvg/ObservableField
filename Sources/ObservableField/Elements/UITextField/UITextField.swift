@@ -8,10 +8,14 @@
 import UIKit
 
 public extension UITextField {
-    var observableText: ControlProperty<UITextField, String?> {
-        ControlProperty(
+    var textControlProperty: ControlProperty<UITextField, String?> {
+        return createTextControlProperty(with: [.editingChanged])
+    }
+    
+    func createTextControlProperty(with events: UIControl.Event) -> ControlProperty<UITextField, String?> {
+        return ControlProperty(
             control: self,
-            with: [.editingChanged],
+            with: events,
             get: { textField in
                 textField.text
             },

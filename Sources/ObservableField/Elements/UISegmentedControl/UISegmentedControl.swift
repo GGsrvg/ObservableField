@@ -8,7 +8,7 @@
 import UIKit
 
 public extension UISegmentedControl {
-    var observableSelectedSegmentIndex: ControlProperty<UISegmentedControl, Int> {
+    var selectedSegmentedIndexControlProperty: ControlProperty<UISegmentedControl, Int> {
         ControlProperty(
             control: self,
             with: [.valueChanged],

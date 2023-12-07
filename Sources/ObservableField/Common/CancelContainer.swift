@@ -5,30 +5,55 @@
 //  Created by GGsrvg on 10.04.2022.
 //
 
-import Foundation
+import Combine
 
-public class CancelContainer {
-    var cancelables: [Cancelable] = []
+public class CancelContainer: Cancellable {
+    
+    public private(set) var cancellables: Set<AnyCancellable> = []
     
     public init() { }
     
     deinit {
-        self.cancelAll()
+        self.cancel()
     }
     
-    public func activate(_ cancelable: Cancelable) {
-        self.cancelables.append(cancelable)
-    }
-    
-    public func activate(_ cancelables: [Cancelable]) {
-        self.cancelables.append(contentsOf: cancelables)
-    }
-    
-    func cancelAll() {
-        for cancelable in cancelables {
-            cancelable.cancel()
+    @discardableResult
+    public func activate(_ cancellable: AnyCancellable) -> Bool {
+        if isCancelled {
+            return false
         }
         
-        cancelables.removeAll()
+        let result = self.cancellables.insert(cancellable)
+        return result.inserted
+    }
+    
+    @discardableResult
+    public func activate(_ cancellables: [Cancellable]) -> Bool {
+        if isCancelled {
+            return false
+        }
+        
+        let cancellables = cancellables.map { cancel in
+            AnyCancellable(cancel)
+        }
+        let newSet = self.cancellables.union(cancellables)
+        self.cancellables = newSet
+        return true
+    }
+    
+    // MARK: - Cancellable
+    public private(set) var isCancelled: Bool = false
+    
+    public func cancel() {
+        if isCancelled {
+            return
+        }
+        isCancelled = true
+        
+        for cancellable in cancellables {
+            cancellable.cancel()
+        }
+        
+        cancellables.removeAll()
     }
 }

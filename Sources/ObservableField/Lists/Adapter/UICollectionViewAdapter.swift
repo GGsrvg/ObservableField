@@ -6,12 +6,13 @@
 //
 
 import UIKit
+import Combine
 
 open class UICollectionViewAdapter<ODS>:
     NSObject,
     UICollectionViewDataSource,
     ObservableDataSourceDelegate,
-    Cancelable
+    Cancellable
 where ODS: ObservableDataSourceSubscribe,
       ODS: ObservableDataSourceContent {
     private var _isCanceled: Bool = false

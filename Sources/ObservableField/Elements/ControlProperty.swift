@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 /**
  It is a wrapper over UIControl and UIControl.Event. Which will track and notify changes.
@@ -13,7 +14,7 @@ import UIKit
  - TC - is control type
  - TV - is value type
  */
-open class ControlProperty<TC, TV> where TC: UIControl, TV: Any {
+open class ControlProperty<TC, TV>: Cancellable where TC: UIControl, TV: Equatable {
     public typealias GetCallback = (TC) -> TV
     public typealias SetCallback = (TC, TV) -> Void
     public typealias NewValueHandler = (TV) -> Void
@@ -22,12 +23,10 @@ open class ControlProperty<TC, TV> where TC: UIControl, TV: Any {
     
     var newValueHandler: NewValueHandler?
     
-    weak var control: TC?
-    var events: UIControl.Event
-    var getCallback: GetCallback?
-    var setCallback: SetCallback?
-    
-    private var _isCanceled: Bool = false
+    private(set) unowned var control: TC
+    let events: UIControl.Event
+    let getCallback: GetCallback?
+    let setCallback: SetCallback?
     
     public init(
         control: TC,
@@ -44,7 +43,7 @@ open class ControlProperty<TC, TV> where TC: UIControl, TV: Any {
     }
     
     @objc private func eventHandler() {
-        guard let control = control,
+        guard !isCanceled,
               let getCallback = getCallback,
               let newValueHandler = newValueHandler
         else { return }
@@ -54,28 +53,28 @@ open class ControlProperty<TC, TV> where TC: UIControl, TV: Any {
     }
     
     func set(_ value: TV) {
-        guard let control = control,
+        guard !isCanceled,
+              let getCallback = getCallback,
               let setCallback = setCallback
         else { return }
         
-        setCallback(control, value)
-    }
-}
-
-extension ControlProperty: Cancelable {
-    public var isCanceled: Bool {
-        get { _isCanceled }
-    }
-    
-    public func cancel() {
-        defer {
-            _isCanceled = true
+        let currentValue = getCallback(control)
+        if currentValue == value {
+            return
         }
         
-        control?.removeTarget(self, action: selector, for: self.events)
-        control = nil
-        getCallback = nil
-        setCallback = nil
+        setCallback(control, value)
+        eventHandler()
+    }
+    
+    // MARK: - Cancellable
+    public private(set) var isCanceled: Bool = false
+    
+    public func cancel() {
+        if isCanceled { return }
+        isCanceled = true
+        
+        control.removeTarget(self, action: selector, for: self.events)
         newValueHandler = nil
     }
 }

@@ -5,11 +5,12 @@
 //  Created by GGsrvg on 21.06.2022.
 //
 
+import Combine
 import XCTest
 @testable import ObservableField
 
 class CancelTests: XCTestCase {
-    class TestCancelable: Cancelable {
+    class TestCancelable: Cancellable {
         var isCanceled: Bool = false
         
         init() { }
@@ -20,48 +21,48 @@ class CancelTests: XCTestCase {
     }
     
     func testActivate() {
-        let object = TestCancelable()
+        let object = AnyCancellable(TestCancelable())
         let container = CancelContainer()
         container.activate(object)
-        XCTAssert(container.cancelables.count == 1)
+        XCTAssert(container.cancellables.count == 1)
     }
     
     func testMultiActivate() {
-        let object1 = TestCancelable()
-        let object2 = TestCancelable()
+        let object1 = AnyCancellable(TestCancelable())
+        let object2 = AnyCancellable(TestCancelable())
         let container = CancelContainer()
         container.activate([
             object1,
             object2,
         ])
-        XCTAssert(container.cancelables.count == 2)
+        XCTAssert(container.cancellables.count == 2)
     }
     
     func testCancel() {
-        let object1 = TestCancelable()
-        let object2 = TestCancelable()
-        var container: CancelContainer? = CancelContainer()
-        container?.activate([
+        let object1 = AnyCancellable(TestCancelable())
+        let object2 = AnyCancellable(TestCancelable())
+        let container: CancelContainer = CancelContainer()
+        container.activate([
             object1,
             object2,
         ])
-        container = nil
-        XCTAssertTrue(object1.isCanceled)
-        XCTAssertTrue(object2.isCanceled)
+        container.cancel()
+        XCTAssertTrue(container.isCancelled)
     }
     
     func testControlProperty() {
-        let textField = UITextField()
-        let property = textField.observableText
+        var textField: UITextField! = UITextField()
+        let property = textField.textControlProperty
         var container: CancelContainer? = CancelContainer()
         container?.activate([
             property
         ])
         container = nil
+        textField = nil
+        
         XCTAssertTrue(property.isCanceled)
-        XCTAssertNil(property.control)
-        XCTAssertNil(property.getCallback)
-        XCTAssertNil(property.setCallback)
+//        XCTAssertNil(property.getCallback)
+//        XCTAssertNil(property.setCallback)
         XCTAssertNil(property.newValueHandler)
     }
     

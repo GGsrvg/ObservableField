@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import Combine
 
-open class ControlAction<TC>: NSObject where TC: UIControl {
+// WARNING: dont remove NSObject
+open class ControlAction<TC>: NSObject, Cancellable where TC: UIControl {
     public typealias Action = (TC) -> Void
     
     let selector = #selector(eventHandler)
@@ -34,22 +36,20 @@ open class ControlAction<TC>: NSObject where TC: UIControl {
     
     @objc private func eventHandler() {
         guard let control = control,
-              let action = action
+              let action = action,
+              !isCanceled
         else { return }
         
         action(control)
     }
-}
-
-extension ControlAction: Cancelable {
-    public var isCanceled: Bool {
-        get { _isCanceled }
-    }
+    
+    public private(set) var isCanceled: Bool = false
     
     public func cancel() {
-        defer {
-            _isCanceled = true
+        if (isCanceled) {
+            return
         }
+        isCanceled = true
         
         control?.removeTarget(self, action: selector, for: self.events)
         control = nil
