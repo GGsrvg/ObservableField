@@ -120,7 +120,6 @@ open class Binding<TC, TV>: Cancellable where TC: UIControl, TV: Equatable {
         isCanceled = true
         
         self.property.newValueHandler = nil
-        self.subject.send(completion: .finished)
         
         self.cancelContainer.cancel()
     }
