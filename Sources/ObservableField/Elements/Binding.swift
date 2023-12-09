@@ -55,18 +55,14 @@ open class Binding<TC, TV>: Cancellable where TC: UIControl, TV: Equatable {
     }
     
     func configureBinding() {
+        setValueFromSubject()
+        
         switch directionType {
         case .fromProperty:
-            setValueFromProperty()
-            
             setBindingFromProperty()
         case .fromSubject:
-            setValueFromSubject()
-            
             setBindingFromSubject()
         case .fromAll:
-            setValueFromSubject()
-            
             setBindingFromProperty()
             setBindingFromSubject()
         }
@@ -96,13 +92,6 @@ open class Binding<TC, TV>: Cancellable where TC: UIControl, TV: Equatable {
             }
             .store(in: self.cancelContainer)
 
-    }
-    
-    private func setValueFromProperty() {
-        let control = property.control
-        if let value = property.getCallback?(control) {
-            self.subject.send(value)
-        }
     }
     
     private func setValueFromSubject() {
