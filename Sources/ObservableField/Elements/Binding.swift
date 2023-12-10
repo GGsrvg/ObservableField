@@ -78,6 +78,8 @@ open class Binding<TC, TV>: Cancellable where TC: UIControl, TV: Equatable {
     
     private func setBindingFromSubject() {
         self.subject
+            .eraseToAnyPublisher()
+            .dropFirst(1)
             .sink { completion in
                 switch completion {
                 case .finished:
