@@ -153,7 +153,7 @@ where ODS: ObservableDataSourceSubscribe,
     
     open func insertCells(at indexPaths: [IndexPath]) {
         func action() {
-            self.tableView?.insertRows(at: indexPaths, with: .top)
+            self.tableView?.insertRows(at: indexPaths, with: .automatic)
         }
         
         if self.isCollectingBatchUpdate {
@@ -167,7 +167,7 @@ where ODS: ObservableDataSourceSubscribe,
     
     open func reloadCells(at indexPaths: [IndexPath]) {
         func action() {
-            self.tableView?.reloadRows(at: indexPaths, with: .fade)
+            self.tableView?.reloadRows(at: indexPaths, with: .automatic)
         }
         
         if self.isCollectingBatchUpdate {
@@ -181,7 +181,7 @@ where ODS: ObservableDataSourceSubscribe,
     
     open func deleteCells(at indexPaths: [IndexPath]) {
         func action() {
-            self.tableView?.deleteRows(at: indexPaths, with: .top)
+            self.tableView?.deleteRows(at: indexPaths, with: .automatic)
         }
         
         if self.isCollectingBatchUpdate {
